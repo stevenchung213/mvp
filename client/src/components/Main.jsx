@@ -1,7 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
 import GoogleApiWrapper from './Map.jsx';
-import Geocode from "react-geocode";
 import Pins from './Pins.jsx';
 
 
@@ -13,7 +12,8 @@ export default class Main extends React.Component {
       force: false,
       note: '',
       coordinates: '',
-      pins: []
+      pins: [],
+      pinCount: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -35,6 +35,7 @@ export default class Main extends React.Component {
     let lat = this.state.coordinates.split(' ')[0];
     let lng = this.state.coordinates.split(' ')[1];
     let data = {
+      id: this.state.pinCount,
       editNow: false,
       note: this.state.note,
       position: {
@@ -49,6 +50,7 @@ export default class Main extends React.Component {
       console.log('Entry posted = ', res);
     }, 'json');
     $('.inputs').val('');
+    this.state.pinCount++;
     this.componentDidMount();
   }
 
@@ -68,7 +70,12 @@ export default class Main extends React.Component {
       updated[pinID].editNow = false;
       return { pins: updated };
     });
-    // update ajax call
+
+    $.ajax({
+      type: 'PATCH',
+      url: `/pins/${pinID}`,
+      data: {id: pinID, note: note}
+    });
   }
 
   deletePin (pinID) {
@@ -76,6 +83,12 @@ export default class Main extends React.Component {
       let updated = [...prevState.pins];
       updated.splice(pinID, 1);
       return { pins: updated };
+    });
+
+    $.ajax({
+      type: 'DELETE',
+      url: `/pins/${pinID}`,
+      data: {id: pinID}
     });
   }
 
@@ -97,21 +110,20 @@ export default class Main extends React.Component {
               <label style={{width:250}}>
                 enter a label for the pin
                 <br/>
-                <input className="inputs" id="name-input" type="text" name="note" onChange={this.handleChange} style={{width:250}} />
+                <input className="inputs" id="name-input" type="text" name="note" style={{borderRadius:35}} onChange={this.handleChange} style={{width:250, borderRadius:13}} />
               </label>
               <label style={{paddingLeft:10, width:250}}>
                 enter coordinates
                 <br/>
-                <input className="inputs" id="coordinates-input" type="text" name="coordinates" onChange={this.handleChange} style={{width:250}} />
+                <input className="inputs" id="coordinates-input" type="text" name="coordinates" onChange={this.handleChange} style={{width:250, borderRadius:13}} />
               </label>
-              <input type="submit" value="submit" style={{marginLeft: 20}}/>
+              <input type="submit" value="submit" style={{marginLeft:20, borderRadius:13}}/>
               <a href="https://latitude.to/" target="_blank" style={{paddingLeft:10, fontSize:18}}>copy and paste coordinates from here</a>
             </form>
           </div>
         </div>
         <Pins pins={this.state.pins} edit={this.editPin} save={this.savePin} delete={this.deletePin} submit={this.handleSubmit}/>
         <GoogleApiWrapper force={!this.state.force} pins={this.state.pins}/>
-        {/*<MapContainer google={window.google}/>*/}
       </React.Fragment>
     )
   }

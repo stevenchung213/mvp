@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const {overview} = require('../db/index.js');
+
 const { pins, db } = require('../db/index.js');
 const path = require('path');
 const cors = require('cors');
@@ -34,30 +34,27 @@ app.post('/pins', (req, res) => {
     console.log('entry added to mongo = ', req.body);
   });
 });
-// app.get('/listings', (req, res) => {
-//   let getDbData = (callback) => {
-//     overview.find({}, (err, docs) => {
-//       if (err) {
-//         console.log('ERROR ERROR ERROR');
-//         callback(err, null);
-//       }
-//       console.log('GET REQUEST SERVED');
-//       callback(docs);
-//     });
-//   };
-//   getDbData(result => {
-//     console.log('sending db results');
-//     res.status(200).send(result);
-//   });
-// });
-//
 
-//
-// app.get('/listings/:propertyID', (req, res) => {
-//   overview.find({propertyID: req.params.propertyID}).exec()
-//     .then(result => res.status(200).send(result))
-//     .catch(err => console.log('ERROR \n', err));
-// });
+app.patch('/pins/:id', (req, res) => {
+  let id = req.body.id;
+  let updatedNote = req.body.note;
+  pins.findOneAndUpdate({id: id}, {note: updatedNote})
+    .exec(() => {
+    res.status(204);
+    console.log('note property updated for document with id=', id);
+    });
+});
+
+app.delete('/pins/:id', (req, res) => {
+  let id = req.body.id;
+  pins.find({id: id})
+    .remove()
+    .exec(() => {
+      res.status(202);
+      console.log('document with id=', id, ' successfully deleted');
+    });
+});
+
 
 app.listen(port, function() {
   console.log(`listening on port ${port}`);

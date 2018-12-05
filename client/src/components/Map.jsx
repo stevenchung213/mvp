@@ -1,9 +1,6 @@
 import React from 'react';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
-// import Paper from '@material-ui/core/Paper';
-// import Typography from '@material-ui/core/Typography';
 import api from '../config/api.js';
-import $ from 'jquery';
 
 
 export class MapContainer extends React.Component {

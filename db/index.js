@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://localhost/fec', { useNewUrlParser: true }).then(console.log('mongoose connected!'));
+
 const mongoURI = 'mongodb://localhost:27017/mvp';
-// const mongoURI = 'mongodb+srv://steve:102884@su-casa-t1n9r.mongodb.net/fec';
+
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
-let db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
@@ -13,6 +13,7 @@ db.once('open', () => {
 });
 
 const pinsSchema = mongoose.Schema({
+  id: Number,
   note: String,
   position: {
     lat: Number,
