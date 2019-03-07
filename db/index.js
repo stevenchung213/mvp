@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const mongoURI = 'mongodb://localhost:27017/mvp';
+const mongoURI = 'mongodb://localhost:27017/mymappins';
 
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
@@ -18,7 +18,8 @@ const pinsSchema = mongoose.Schema({
   position: {
     lat: Number,
     lng: Number
-  }
+  },
+  pinCount: Number
 });
 
 const pins = mongoose.model('pins', pinsSchema);

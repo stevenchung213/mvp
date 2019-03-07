@@ -18,6 +18,7 @@ export default class Pins extends React.Component {
   }
 
   render() {
+    // console.log(this.props)
     if (this.props.pins.length > 0) {
       return (
         <React.Fragment>
@@ -40,10 +41,10 @@ export default class Pins extends React.Component {
                       + ' y: ' + pin.position.lng}
                       </td>
                       <td>
-                        <button style={{borderRadius:13}} onClick={()=>{this.props.save(--i, this.state.newNote)}}>save</button>
+                        <button style={{borderRadius:13}} onClick={()=>{this.props.save(pin.id, this.state.newNote)}}>save</button>
                       </td>
                       <td>
-                        <button style={{borderRadius:13}} onClick={()=>{this.props.delete(--i)}}>delete</button>
+                        <button style={{borderRadius:13}} onClick={()=>{this.props.delete(pin.id)}}>delete</button>
                       </td>
                   </tr>
                 )
@@ -56,7 +57,7 @@ export default class Pins extends React.Component {
                     + ' y: ' + pin.position.lng}
                     </td>
                     <td>
-                      <button style={{borderRadius:13}} onClick={()=>{this.props.edit(--i)}}>edit</button>
+                      <button style={{borderRadius:13}} onClick={()=>{this.props.edit(pin.id)}}>edit</button>
                     </td>
                     <td>
                       <button style={{borderRadius:13}} onClick={()=>{this.props.delete(pin.id)}}>delete</button>
